@@ -1,6 +1,6 @@
 {
   "name": "vx-form",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "description": "VX React Form engine with hooks",
   "main": "./dist/index.js",
@@ -13,10 +13,10 @@
     "yarn": "^1.0"
   },
   "dependencies": {
+    "vx-std": ">=0.1.7"
   },
   "peerDependencies": {
-    "react": ">=16.8",
-    "vx-std": ">=0.1.7"
+    "react": ">=16.8"
   },
   "scripts": {
     "clean": "rimraf dist",
@@ -42,8 +42,7 @@
     "tslint-etc": "1.2.12",
     "typedoc": "^0.14.2",
     "typescript": "3.2.2",
-    "typescript-tslint-plugin": "0.2.1",
-    "vx-std": ">=0.1.7"
+    "typescript-tslint-plugin": "0.2.1"
   },
   "files": [
     "dist"
