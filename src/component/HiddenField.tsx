@@ -1,4 +1,5 @@
-import React, { ComponentProps } from 'react';
+import * as React from 'react';
+import { ComponentProps, useEffect } from 'react';
 import useField from '../hook/useField';
 
 type HiddenFieldProps = ComponentProps<'input'> & {
@@ -10,7 +11,7 @@ type HiddenFieldProps = ComponentProps<'input'> & {
 export default function HiddenField({ name, value, html, orphaned, ...props }: HiddenFieldProps) {
     const { onFocus, onChange, onBlur, value: formValue } = useField(name);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!orphaned) {
             onFocus();
             onChange(value);

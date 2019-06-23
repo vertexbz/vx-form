@@ -1,4 +1,5 @@
-import React, { ReactNode, ComponentProps, ElementType } from 'react';
+import * as React from 'react';
+import { ReactNode, ComponentProps, ElementType } from 'react';
 import { path } from 'vx-std';
 import { useContext, Provider } from '../context';
 

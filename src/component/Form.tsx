@@ -1,4 +1,5 @@
-import React, { ComponentProps, RefObject } from 'react';
+import * as React from 'react';
+import { ComponentProps, RefObject, useRef, useImperativeHandle } from 'react';
 import { proxy } from 'vx-std';
 import Provider, { ProviderRefType } from './Provider';
 
@@ -17,10 +18,10 @@ const Form = ({
     treatWarningsLikeErrors,
     ...props
 }: FormProps, ref: RefObject<ProviderRefType & HTMLFormElement>) => {
-    const provider = React.useRef<ProviderRefType | null>();
-    const form = React.useRef<HTMLFormElement>();
+    const provider = useRef<ProviderRefType | null>();
+    const form = useRef<HTMLFormElement>();
 
-    React.useImperativeHandle(ref, () => proxy.fallbackProxy(provider.current, form.current) as any, [provider.current, form.current]);
+    useImperativeHandle(ref, () => proxy.fallbackProxy(provider.current, form.current) as any, [provider.current, form.current]);
 
     return (
         <Provider

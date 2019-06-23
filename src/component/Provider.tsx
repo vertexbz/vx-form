@@ -1,4 +1,5 @@
-import React, { RefObject, PropsWithChildren } from 'react';
+import * as React from 'react';
+import { RefObject, PropsWithChildren, forwardRef, useState, useEffect, useImperativeHandle, useRef, useCallback } from 'react';
 import { predicate } from 'vx-std';
 import { Provider as ContextProvider } from '../context/context';
 import makeContext from '../context/make';
@@ -37,10 +38,10 @@ const Provider = ({
     asyncValidateOn = 'blur',
     treatWarningsLikeErrors = false
 }: PropsWithChildren<ProviderProps>, ref: RefObject<ProviderRefType>) => {
-    const submitRef = React.useRef<any>();
-    const [context] = React.useState(() => makeContext(new FormModel(), submitRef));
+    const submitRef = useRef<any>();
+    const [context] = useState(() => makeContext(new FormModel(), submitRef));
 
-    const submit = React.useCallback(() => {
+    const submit = useCallback(() => {
         if (!context.model.isValid()) {
             return Promise.reject();
         }
@@ -83,11 +84,11 @@ const Provider = ({
     }, []);
     submitRef.current = submit;
 
-    React.useEffect(() => context.model.setInitial(initialValues || {}), [initialValues]);
-    React.useEffect(() => context.model.setConfig({ includeInitial, touchOn, syncValidateOn, asyncValidateOn, treatWarningsLikeErrors }),
+    useEffect(() => context.model.setInitial(initialValues || {}), [initialValues]);
+    useEffect(() => context.model.setConfig({ includeInitial, touchOn, syncValidateOn, asyncValidateOn, treatWarningsLikeErrors }),
         [includeInitial, touchOn, syncValidateOn, asyncValidateOn, treatWarningsLikeErrors]);
 
-    React.useImperativeHandle(ref, () => {
+    useImperativeHandle(ref, () => {
         const methods = {
             submit() {
                 return submit();
@@ -114,4 +115,4 @@ const Provider = ({
     );
 };
 
-export default React.forwardRef<ProviderRefType, ProviderProps>(Provider as any);
+export default forwardRef<ProviderRefType, ProviderProps>(Provider as any);

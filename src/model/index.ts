@@ -1,5 +1,4 @@
-import Multimap from 'multimap';
-import { objectmap, array, object, predicate } from 'vx-std';
+import { MultiMap, objectmap, array, object, predicate } from 'vx-std';
 import { FORM_FEEDBACK, FORM_LISTENER } from '../constant';
 import ValidationCache from './cache/validation';
 
@@ -38,17 +37,17 @@ export default class FormModel {
     _current = new Map<string, any>();
     _initial = new Map<string, any>();
 
-    _warning = new Multimap<string | Symbol, string>();
-    _error = new Multimap<string | Symbol, string>();
-    _submissionWarning = new Multimap<string | Symbol, string>();
-    _submissionError = new Multimap<string | Symbol, string>();
+    _warning = new MultiMap<string | Symbol, string>();
+    _error = new MultiMap<string | Symbol, string>();
+    _submissionWarning = new MultiMap<string | Symbol, string>();
+    _submissionError = new MultiMap<string | Symbol, string>();
 
-    _listeners = new Multimap<string | Symbol, FormModelListenerSig | FieldModelListenerSig>();
+    _listeners = new MultiMap<string | Symbol, FormModelListenerSig | FieldModelListenerSig>();
     _pendingNotifications = new Set<string | Symbol>();
 
     _validator = {
-        sync: new Multimap<string, ValidatorSig>(),
-        async: new Multimap<string, AsyncValidatorSig>()
+        sync: new MultiMap<string, ValidatorSig>(),
+        async: new MultiMap<string, AsyncValidatorSig>()
     };
 
     _asyncValidation: Array<string> = [];
@@ -286,7 +285,7 @@ export default class FormModel {
 
     setSubmissionFeedback(result?: ValidationResultType) {
         if (result) {
-            const cb = (acc: Multimap<string | Symbol, string>, [field, feedback]: [string | Symbol, string | string[]]) => {
+            const cb = (acc: MultiMap<string | Symbol, string>, [field, feedback]: [string | Symbol, string | string[]]) => {
                 this._pendingNotifications.add(field);
                 ([] as string[]).concat(feedback).forEach((feedback: string) => acc.set(field, feedback));
                 return acc;
@@ -317,7 +316,7 @@ export default class FormModel {
         this._pendingNotifications.add(FORM_FEEDBACK);
     }
 
-    _setValidator(field: string, validator: ValidatorSig | AsyncValidatorSig | ValidatorSig[] | AsyncValidatorSig[], cache: ValidationCache, store: Multimap<string | Symbol, ValidatorSig | AsyncValidatorSig>) {
+    _setValidator(field: string, validator: ValidatorSig | AsyncValidatorSig | ValidatorSig[] | AsyncValidatorSig[], cache: ValidationCache, store: MultiMap<string | Symbol, ValidatorSig | AsyncValidatorSig>) {
         const validators = ([] as any[]).concat(validator);
 
         const value = this.getValue(field);
@@ -415,7 +414,7 @@ export default class FormModel {
         cache.set(field, validator, result);
     }
 
-    _addValidationEntry(acc: Multimap<string | Symbol, string>, [field, value]: [string | Symbol, string | string[]]) {
+    _addValidationEntry(acc: MultiMap<string | Symbol, string>, [field, value]: [string | Symbol, string | string[]]) {
         ([] as string[]).concat(value).forEach((feedback: string) => acc.set(field, feedback));
         this._pendingNotifications.add(field);
         return acc;
@@ -426,7 +425,7 @@ export default class FormModel {
         Object.entries(warning || {}).reduce(this._addValidationEntry, this._warning);
     }
 
-    _deleteValidationEntry(acc: Multimap<string | Symbol, string>, [field, value]: [string | Symbol, string | string[]]) {
+    _deleteValidationEntry(acc: MultiMap<string | Symbol, string>, [field, value]: [string | Symbol, string | string[]]) {
         ([] as string[]).concat(value).forEach((feedback: string) => acc.delete(field, feedback));
         this._pendingNotifications.add(field);
         return acc;

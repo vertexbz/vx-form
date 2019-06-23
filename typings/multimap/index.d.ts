@@ -11,4 +11,5 @@ export declare class Multimap<K = string, V = any> {
     keys(): Iterable<K>;
     delete(key: K, value?: V): void;
 }
+
 export default Multimap;
